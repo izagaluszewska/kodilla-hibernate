@@ -12,31 +12,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public final class Facade {
+public final class SearchingServiceFacade {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchingServiceFacade.class);
+
     @Autowired
     private EmployeeDao employeeDao;
 
     @Autowired
     private CompanyDao companyDao;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Facade.class);
-
     public List<Employee> searchEmployeeByLastnameWithSubstring(String partLastname) throws SearchingException {
         LOGGER.info("Starting search for employee's lastname containing this letters: " + partLastname);
-        partLastname = "%" + partLastname + "%";
         List<Employee> searchedEmployees = employeeDao.findEmployeesByLastnameWithSubstring(partLastname);
         if (searchedEmployees.size() == 0) {
             LOGGER.error(SearchingException.ERR_NO_EMPLOYEE_FIT);
             throw new SearchingException(SearchingException.ERR_NO_EMPLOYEE_FIT);
         } else {
-        LOGGER.info("Found " + searchedEmployees.size() + " employee/employees with lastname containing searched letters");
-        return searchedEmployees;
+            LOGGER.info("Found " + searchedEmployees.size() + " employee/employees with lastname containing searched letters");
+            return searchedEmployees;
         }
     }
 
     public List<Company> searchCompanyBySubstring(String partName) throws SearchingException {
         LOGGER.info("Starting search for employee's lastname containing this letters: " + partName);
-        partName = "%" + partName + "%";
         List<Company> searchedCompanies = companyDao.findCompaniesByNameWithSubstringLike(partName);
         if (searchedCompanies.size() == 0) {
             LOGGER.error(SearchingException.ERR_NO_COMPANY_FIT);
