@@ -14,4 +14,7 @@ import java.util.List;
 public interface CompanyDao extends CrudRepository<Company, Integer> {
     @Query
     List<Company> findCompaniesByNameFirstThreeLettersLike(@Param("NAME") String name);
+
+    @Query
+    List<Company> findCompaniesByNameWithSubstringLike(@Param("NAME") String name);
 }

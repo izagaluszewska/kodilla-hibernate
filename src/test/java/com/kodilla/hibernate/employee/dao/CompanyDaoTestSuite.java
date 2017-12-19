@@ -2,7 +2,6 @@ package com.kodilla.hibernate.employee.dao;
 
 import com.kodilla.hibernate.employee.Company;
 import com.kodilla.hibernate.employee.Employee;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class CompanyDaoTestSuite {
     Company dataMaesters = new Company("Data Maesters");
     Company greyMatter = new Company("Grey Matter");
 
-    @Before
+   @Before
     public void beforeTest() {
         softwareMachine.getEmployees().add(johnSmith);
         dataMaesters.getEmployees().add(stephanieClarkson);
@@ -101,6 +100,42 @@ public class CompanyDaoTestSuite {
         } finally {
             //CleanUp
             companyDao.delete(foundedCompanyId);
+        }
+    }
+
+    @Test
+    public void testFindCompanyByNameWithSubstring() {
+        //Given
+        //When
+        List<Company> companiesWithSubstring = companyDao.findCompaniesByNameWithSubstringLike("%twa%");
+        int foundedCompanyId = companiesWithSubstring.iterator().next().getId();
+        Company readFoundedCompany = companyDao.findOne(foundedCompanyId);
+        //Then
+        try {
+            Assert.assertEquals(1, companiesWithSubstring.size());
+            Assert.assertEquals(foundedCompanyId, readFoundedCompany.getId());
+        } catch (Exception e) {
+        } finally {
+            //CleanUp
+            companyDao.delete(foundedCompanyId);
+        }
+    }
+
+    @Test
+    public void testFindEmployeesByLastnameWithSubstring() {
+        //Given
+        //When
+        List<Employee> employeeLastnamesWithSubstring = employeeDao.findEmployeesByLastnameWithSubstring("%ark%");
+        int foundedEmployeeId = employeeLastnamesWithSubstring.iterator().next().getId();
+        Employee readFoundedEmployees = employeeDao.findOne(foundedEmployeeId);
+        //Then
+        try {
+            Assert.assertEquals(1, employeeLastnamesWithSubstring.size());
+            Assert.assertEquals(foundedEmployeeId, readFoundedEmployees.getId());
+        } catch (Exception e) {
+        } finally {
+            //CleanUp
+            employeeDao.delete(foundedEmployeeId);
         }
     }
 }
